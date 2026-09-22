@@ -1,82 +1,80 @@
 # NexusOps
 
-NexusOps is a multi-tenant B2B operations platform for organizations that need a calm, structured place to organize teams, projects, and day-to-day work. The repository currently contains the approved product and architecture foundation plus minimal web and API application shells.
+Operations, connected.
 
-## Current implementation
+## Overview
 
-Implemented:
+NexusOps is a multi-tenant B2B operations and work-management platform for teams that need a clear place to coordinate projects, ownership, and day-to-day work.
 
-- Product, architecture, data, security, testing, performance, and UI/UX planning
-- pnpm workspace with separate Next.js web and NestJS API applications
-- Responsive, accessible web foundation page with semantic design tokens
-- Versioned API foundation with `GET /api/v1/health`, validated runtime configuration, security headers, CORS allowlisting, and graceful shutdown hooks
-- Strict TypeScript, ESLint, Prettier, production builds, and focused API foundation tests
+The project is under active development. The repository currently provides the web and API application foundations, shared engineering standards, automated quality checks, and a health endpoint. Business workflows are not yet available.
 
-Planned but not implemented:
+## Core Capabilities
 
-- Database and Prisma integration
-- Authentication, sessions, users, organizations, memberships, invitations, and RBAC
-- Teams, projects, work items, comments, activity, notifications, analytics, and search
-- Transactional outbox, background processing, WebSockets, and deployment infrastructure
+NexusOps is being developed to support:
 
-## V1 in one paragraph
+- Organization workspaces, membership, and role-based access
+- Teams, projects, work items, ownership, priorities, and due dates
+- Contextual comments, activity history, and notifications
+- Selective real-time updates for operational events
+- Search, workload visibility, and explainable operational dashboards
 
-A user can create an account and organization, invite colleagues, organize members into teams, create projects and work items, assign and discuss work, receive in-app notifications, and review meaningful project and organization activity. Managers get a concise operational dashboard covering active projects, work status, overdue items, and workload. Tenant isolation, role-based permissions, auditability, accessible UX, and risk-based tests are first-class requirements.
+These capabilities describe the product direction and should not be interpreted as completed functionality.
 
-## Planned architecture
+## Tech Stack
 
-- pnpm workspace with `apps/web` and `apps/api`; no build orchestrator initially
-- Next.js App Router frontend with feature-oriented modules and a small accessible UI foundation
-- NestJS REST API as a modular monolith with OpenAPI contracts
-- PostgreSQL with Prisma, explicit relational constraints, indexes, and transactions
-- Opaque, revocable server sessions in secure HTTP-only cookies
-- Transactional outbox for durable side effects; a database-backed worker is added with email delivery
-- Selective real-time notification delivery later in V1; Redis is deferred until scaling evidence requires it
-- Docker Compose for local development and GitHub Actions during the delivery phase, not during planning
+- **Web:** Next.js 16, React 19, TypeScript, and Tailwind CSS
+- **API:** NestJS 12, TypeScript, Express, and Helmet
+- **Tooling:** pnpm workspaces, ESLint, Prettier, and Vitest
+- **Automation:** GitHub Actions for formatting, linting, type checking, tests, and production builds
 
-The rationale and tradeoffs are documented in [Architecture](docs/ARCHITECTURE.md) and the [ADRs](docs/adr/).
+## Project Structure
 
-## Local development
+```text
+apps/
+  web/       Next.js application
+  api/       NestJS REST API
+.github/
+  workflows/ Continuous integration
+```
 
-Prerequisites:
+Shared packages will be introduced only when application code has a concrete sharing requirement.
+
+## Getting Started
+
+### Prerequisites
 
 - Node.js 22.12 or newer within the Node 22 release line
-- Corepack (included with the supported Node installation)
+- Corepack, included with the supported Node.js installation
 
-Install dependencies and start both applications:
+Install dependencies:
 
 ```powershell
 corepack pnpm install
+```
+
+Start the web and API applications together:
+
+```powershell
 corepack pnpm dev
 ```
 
-The web application runs at `http://localhost:3000`. The API health endpoint runs at `http://localhost:3001/api/v1/health`.
+The web application runs at `http://localhost:3000`. The API health endpoint is available at `http://localhost:3001/api/v1/health`.
 
-The API defaults to port `3001` with cross-origin requests disabled. Set `PORT` and a comma-separated `CORS_ORIGINS` environment variable when another local origin needs API access; safe examples are documented in `apps/api/.env.example`.
+The API defaults to port `3001` with cross-origin requests disabled. Safe local configuration examples are available in `apps/api/.env.example`.
 
-Run the verified workspace quality gates:
+## Available Scripts
 
-```powershell
-corepack pnpm format:check
-corepack pnpm lint
-corepack pnpm typecheck
-corepack pnpm test
-corepack pnpm build
-```
+Run commands from the repository root:
 
-## Documentation map
+| Command                      | Purpose                                                   |
+| ---------------------------- | --------------------------------------------------------- |
+| `corepack pnpm dev`          | Start the web and API development servers                 |
+| `corepack pnpm build`        | Create production builds for both applications            |
+| `corepack pnpm lint`         | Run lint checks across the workspace                      |
+| `corepack pnpm typecheck`    | Run strict TypeScript checks                              |
+| `corepack pnpm test`         | Run the currently available automated tests               |
+| `corepack pnpm format:check` | Verify formatting for application and configuration files |
 
-- [Product definition and V1 scope](docs/PRODUCT.md)
-- [System and API architecture](docs/ARCHITECTURE.md)
-- [Conceptual data model](docs/DATA_MODEL.md)
-- [UI and UX direction](docs/UI_UX.md)
-- [Security and threat model](docs/SECURITY.md)
-- [Testing strategy](docs/TESTING.md)
-- [Performance strategy](docs/PERFORMANCE.md)
-- [Milestone roadmap](docs/ROADMAP.md)
+## Development Status
 
-## Current status
-
-Planning is approved and the M0 repository/application foundation is established locally. Business implementation must continue milestone by milestone from the roadmap. Decisions requiring approval before later milestones remain listed there.
-
-No performance, usage, reliability, or customer claims are made at this stage.
+NexusOps is under active development. The current codebase establishes a production-oriented frontend, backend, and quality foundation; product features will be added incrementally as complete, tested workflows.

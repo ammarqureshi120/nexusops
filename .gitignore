@@ -54,3 +54,7 @@ Desktop.ini
 *.key
 *.p12
 *.pfx
+
+# Local-only project material
+docs/
+AGENTS.md
