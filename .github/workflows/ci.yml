@@ -55,6 +55,9 @@ jobs:
       - name: Install dependencies
         run: corepack pnpm install --frozen-lockfile
 
+      - name: Generate Prisma client
+        run: corepack pnpm db:generate
+
       - name: Validate database schema
         run: corepack pnpm --filter @nexusops/api prisma:validate
 

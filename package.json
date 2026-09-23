@@ -9,6 +9,7 @@
     "pnpm": ">=10.34.5 <11"
   },
   "scripts": {
+    "postinstall": "corepack pnpm db:generate",
     "dev": "corepack pnpm --parallel --filter \"./apps/*\" dev",
     "build": "corepack pnpm -r --if-present build",
     "lint": "corepack pnpm -r --if-present lint",
