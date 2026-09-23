@@ -23,7 +23,8 @@ These capabilities describe the product direction and should not be interpreted 
 ## Tech Stack
 
 - **Web:** Next.js 16, React 19, TypeScript, and Tailwind CSS
-- **API:** NestJS 12, TypeScript, Express, and Helmet
+- **API:** NestJS 12, TypeScript, Express, Prisma, and Helmet
+- **Database:** PostgreSQL 17
 - **Tooling:** pnpm workspaces, ESLint, Prettier, and Vitest
 - **Automation:** GitHub Actions for formatting, linting, type checking, tests, and production builds
 
@@ -45,11 +46,20 @@ Shared packages will be introduced only when application code has a concrete sha
 
 - Node.js 22.12 or newer within the Node 22 release line
 - Corepack, included with the supported Node.js installation
+- Docker Desktop or another Docker Compose-compatible runtime
 
 Install dependencies:
 
 ```powershell
 corepack pnpm install
+```
+
+Create the local API environment, start PostgreSQL, and apply migrations:
+
+```powershell
+Copy-Item apps/api/.env.example apps/api/.env
+docker compose up -d postgres
+corepack pnpm db:migrate
 ```
 
 Start the web and API applications together:
@@ -60,7 +70,9 @@ corepack pnpm dev
 
 The web application runs at `http://localhost:3000`. The API health endpoint is available at `http://localhost:3001/api/v1/health`.
 
-The API defaults to port `3001` with cross-origin requests disabled. Safe local configuration examples are available in `apps/api/.env.example`.
+The API defaults to port `3001` and permits credentialed requests from `http://localhost:3000` in development. Safe local configuration examples are available in `apps/api/.env.example`.
+
+Authentication endpoints are available under `/api/v1/auth`. Browser sessions use an HttpOnly cookie; no authentication token is exposed to frontend JavaScript.
 
 ## Available Scripts
 
@@ -74,6 +86,7 @@ Run commands from the repository root:
 | `corepack pnpm typecheck`    | Run strict TypeScript checks                              |
 | `corepack pnpm test`         | Run the currently available automated tests               |
 | `corepack pnpm format:check` | Verify formatting for application and configuration files |
+| `corepack pnpm db:migrate`   | Apply pending Prisma migrations to the local database     |
 
 ## Development Status
 

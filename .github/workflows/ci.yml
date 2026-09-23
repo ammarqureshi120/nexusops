@@ -6,6 +6,7 @@ on:
     branches:
       - main
       - develop
+      - "feat/**"
 
 permissions:
   contents: read
@@ -19,6 +20,25 @@ jobs:
     name: Quality gates
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      CORS_ORIGINS: http://localhost:3000
+      DATABASE_URL: postgresql://nexusops:nexusops_test@localhost:5432/nexusops_test?schema=public
+      SESSION_HASH_SECRET: ci-only-session-secret-that-is-long-enough
+      TEST_DATABASE_URL: postgresql://nexusops:nexusops_test@localhost:5432/nexusops_test?schema=public
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: nexusops_test
+          POSTGRES_USER: nexusops
+          POSTGRES_PASSWORD: nexusops_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U nexusops -d nexusops_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
 
     steps:
       - name: Check out repository
@@ -34,6 +54,15 @@ jobs:
 
       - name: Install dependencies
         run: corepack pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: corepack pnpm db:generate
+
+      - name: Validate database schema
+        run: corepack pnpm --filter @nexusops/api prisma:validate
+
+      - name: Apply database migrations
+        run: corepack pnpm --filter @nexusops/api exec prisma migrate deploy
 
       - name: Check formatting
         run: corepack pnpm format:check
