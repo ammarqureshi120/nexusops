@@ -15,9 +15,23 @@
     "typecheck": "corepack pnpm -r --if-present typecheck",
     "test": "corepack pnpm -r --if-present test",
     "format:check": "prettier --check \"apps/**/*.{ts,tsx,css,json,mjs}\" \".github/**/*.{yaml,yml}\" \"*.{json,yaml,yml}\" README.md",
-    "format:write": "prettier --write \"apps/**/*.{ts,tsx,css,json,mjs}\" \".github/**/*.{yaml,yml}\" \"*.{json,yaml,yml}\" README.md"
+    "format:write": "prettier --write \"apps/**/*.{ts,tsx,css,json,mjs}\" \".github/**/*.{yaml,yml}\" \"*.{json,yaml,yml}\" README.md",
+    "db:migrate": "corepack pnpm --filter @nexusops/api prisma:migrate",
+    "db:generate": "corepack pnpm --filter @nexusops/api prisma:generate"
   },
   "devDependencies": {
     "prettier": "3.9.8"
+  },
+  "pnpm": {
+    "overrides": {
+      "@prisma/config>deepmerge-ts": "8.0.2",
+      "@prisma/config>effect": "3.20.0"
+    },
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "argon2",
+      "prisma"
+    ]
   }
 }

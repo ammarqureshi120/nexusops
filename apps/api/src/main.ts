@@ -1,26 +1,13 @@
 import "reflect-metadata";
+import "dotenv/config";
 
-import { NestFactory } from "@nestjs/core";
-import helmet from "helmet";
-
-import { AppModule } from "./app.module";
-import { readRuntimeConfig } from "./config/runtime-config";
+import { RUNTIME_CONFIG } from "./config/config.module";
+import type { RuntimeConfig } from "./config/runtime-config";
+import { createApplication } from "./application";
 
 async function bootstrap(): Promise<void> {
-  const config = readRuntimeConfig();
-  const app = await NestFactory.create(AppModule);
-
-  app.use(helmet());
-  app.setGlobalPrefix("api/v1");
-  app.enableShutdownHooks();
-
-  if (config.corsOrigins.length > 0) {
-    app.enableCors({
-      credentials: true,
-      origin: config.corsOrigins,
-    });
-  }
-
+  const app = await createApplication();
+  const config = app.get<RuntimeConfig>(RUNTIME_CONFIG);
   await app.listen(config.port, "0.0.0.0");
 }
 

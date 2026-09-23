@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <main className="foundation-shell">
@@ -8,13 +10,20 @@ export default function Home() {
           </span>
           <span>NexusOps</span>
         </a>
-        <span className="phase-label">Foundation · M0</span>
+        <nav className="public-nav" aria-label="Account">
+          <Link className="quiet-link" href="/signin">
+            Sign in
+          </Link>
+          <Link className="small-primary-link" href="/signup">
+            Create account
+          </Link>
+        </nav>
       </header>
 
       <section className="hero" id="main-content" aria-labelledby="hero-title">
         <p className="eyebrow">
           <span className="status-dot" aria-hidden="true" />
-          Workspace foundation established
+          Built for focused operations
         </p>
         <h1 id="hero-title">
           Operations,
@@ -22,14 +31,22 @@ export default function Home() {
           <span>connected.</span>
         </h1>
         <p className="hero-copy">
-          NexusOps is being built as a calm, focused workspace for teams to
-          coordinate projects and operational work with clarity.
+          A calm, structured workspace for teams to coordinate ownership and
+          operational work with clarity.
         </p>
+        <div className="hero-actions">
+          <Link className="primary-link" href="/signup">
+            Create your account
+          </Link>
+          <Link className="secondary-link" href="/signin">
+            Sign in
+          </Link>
+        </div>
       </section>
 
       <footer className="site-footer">
-        <p>Product capabilities arrive milestone by milestone.</p>
-        <p>Next.js · NestJS · TypeScript</p>
+        <p>NexusOps identity foundation</p>
+        <p>Next.js · NestJS · PostgreSQL</p>
       </footer>
     </main>
   );

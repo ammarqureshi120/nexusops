@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: nexusops
+      POSTGRES_USER: nexusops
+      POSTGRES_PASSWORD: nexusops_local
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexusops -d nexusops"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - nexusops-postgres:/var/lib/postgresql/data
+
+volumes:
+  nexusops-postgres:
